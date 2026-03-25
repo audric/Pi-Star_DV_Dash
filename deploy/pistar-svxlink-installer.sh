@@ -52,6 +52,25 @@ check_pistar() {
     info "Pi-Star detected: $(grep 'Version' /etc/pistar-release | cut -d= -f2)"
 }
 
+check_disk_space() {
+    # Require at least 50MB free on root filesystem
+    MIN_KB=51200
+    AVAIL_KB=$(df / --output=avail | tail -1 | tr -d ' ')
+    AVAIL_MB=$((AVAIL_KB / 1024))
+    if [ "$AVAIL_KB" -lt "$MIN_KB" ]; then
+        error "Not enough disk space: ${AVAIL_MB}MB available, need at least 50MB. Free up space and try again."
+    fi
+    info "Disk space OK: ${AVAIL_MB}MB available"
+}
+
+check_rw() {
+    # Verify filesystem is mounted read-write
+    if ! touch /tmp/.svxlink_rw_test 2>/dev/null; then
+        error "Filesystem appears read-only. Run 'rpi-rw' first."
+    fi
+    rm -f /tmp/.svxlink_rw_test
+}
+
 # ── Parse arguments ──────────────────────────────────────────────────
 DASHBOARD_REPO="$DASHBOARD_REPO_DEFAULT"
 UNINSTALL=0
@@ -364,6 +383,8 @@ main() {
 
     check_root
     check_pistar
+    check_rw
+    check_disk_space
 
     if [ "$UNINSTALL" -eq 1 ]; then
         do_uninstall
