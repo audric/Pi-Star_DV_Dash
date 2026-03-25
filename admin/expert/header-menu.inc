@@ -19,7 +19,8 @@
     <a href="edit_ysfgateway.php" style="color: #ffffff;">YSF GW</a> |
     <a href="edit_p25gateway.php" style="color: #ffffff;">P25 GW</a> |
     <a href="edit_nxdngateway.php" style="color: #ffffff;">NXDN GW</a> |
-    <a href="edit_dapnetgateway.php" style="color: #ffffff;">DAPNET GW</a><br />
+    <a href="edit_dapnetgateway.php" style="color: #ffffff;">DAPNET GW</a> |
+    <a href="edit_svxlink.php" style="color: #ffffff;">SVXLink</a><br />
     <b>Full Edit:</b>
     <a href="fulledit_dmrgateway.php" style="color: #ffffff;">DMR GW</a> |
     <a href="fulledit_pistar-remote.php" style="color: #ffffff;">PiStar-Remote</a> |
@@ -27,7 +28,8 @@
     <a href="fulledit_bmapikey.php" style="color: #ffffff;">BM API</a> |
     <a href="fulledit_dapnetapi.php" style="color: #ffffff;">DAPNET API</a> |
     <a href="fulledit_cron.php" style="color: #ffffff;">System Cron</a> |
-    <a href="fulledit_rssidat.php" style="color: #ffffff;">RSSI Dat</a>
+    <a href="fulledit_rssidat.php" style="color: #ffffff;">RSSI Dat</a> |
+    <a href="fulledit_svxlinkhosts.php" style="color: #ffffff;">SVXLink Hosts</a>
     &emsp;<b>Tools:</b>
     <a href="edit_dashboard.php" style="color: #ffffff;">CSS Tool</a> |
     <a href="modem_fw_upgrade.php" style="color: #ffffff;">FW</a> |
