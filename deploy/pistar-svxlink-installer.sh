@@ -279,11 +279,6 @@ install_svxlink_config() {
         mkdir -p "$SVXLINK_LOG_DIR" 2>/dev/null || true
     fi
 
-    if [ -f "$SVXLINK_CONF" ]; then
-        info "SVXLink config already exists at $SVXLINK_CONF, keeping existing"
-        return
-    fi
-
     # Read callsign from mmdvmhost if available
     CALLSIGN=""
     if [ -f /etc/mmdvmhost ]; then
@@ -294,52 +289,32 @@ install_svxlink_config() {
         warn "Could not determine callsign from mmdvmhost, using $CALLSIGN"
     fi
 
-    # Read TX/RX frequencies from mmdvmhost if available
-    TX_FREQ="0"
-    RX_FREQ="0"
-    if [ -f /etc/mmdvmhost ]; then
-        TX_FREQ=$(grep -A 20 '^\[Info\]' /etc/mmdvmhost | grep '^TXFrequency=' | head -1 | cut -d= -f2 | tr -d '[:space:]')
-        RX_FREQ=$(grep -A 20 '^\[Info\]' /etc/mmdvmhost | grep '^RXFrequency=' | head -1 | cut -d= -f2 | tr -d '[:space:]')
+    # Backup existing config if present
+    if [ -f "$SVXLINK_CONF" ]; then
+        cp "$SVXLINK_CONF" "${SVXLINK_CONF}.bak"
+        info "Backed up existing config to ${SVXLINK_CONF}.bak"
     fi
-    [ -z "$TX_FREQ" ] && TX_FREQ="0"
-    [ -z "$RX_FREQ" ] && RX_FREQ="0"
 
     cat > "$SVXLINK_CONF" <<CONF
-# SVXLink configuration for Pi-Star
-# Audio path: MMDVM modem <-> MMDVMHost [FM Network] <-> UDP <-> SVXLink <-> SVXReflector
-# No sound card needed - audio flows via UDP between MMDVMHost and SVXLink.
-#
-# MMDVMHost [FM Network] must be enabled in /etc/mmdvmhost with matching ports:
-#   [FM Network]
-#   Enable=1
-#   LocalAddress=127.0.0.1
-#   LocalPort=3810
-#   GatewayAddress=127.0.0.1
-#   GatewayPort=4810
-#   Protocol=RAW
-#   SampleRate=8000
-
 [GLOBAL]
 LOGICS=SimplexLogic
-CALLSIGN=${CALLSIGN}
+CFG_DIR=svxlink.d
 TIMESTAMP_FORMAT="%c"
-CARD_SAMPLE_RATE=8000
-CARD_CHANNELS=2
-LOCATION_INFO=LocationInfo
+CARD_SAMPLE_RATE=48000
 
 [SimplexLogic]
 TYPE=Simplex
 RX=Rx1
 TX=Tx1
-MODULES=
+MODULES=ModuleEchoLink
 CALLSIGN=${CALLSIGN}
-SHORT_IDENT_INTERVAL=10
+SHORT_IDENT_INTERVAL=60
 LONG_IDENT_INTERVAL=60
-IDENT_NAG_TIMEOUT=20
-IDENT_NAG_MIN_TIME=2000
+EVENT_HANDLER=/usr/share/svxlink/events.tcl
+DEFAULT_LANG=en_US
+RGR_SOUND_DELAY=0
 FX_GAIN_NORMAL=0
 FX_GAIN_LOW=-12
-RGR_SOUND_DELAY=0
 
 [Rx1]
 TYPE=Local
@@ -349,8 +324,13 @@ SQL_DET=VOX
 SQL_START_DELAY=0
 SQL_DELAY=0
 SQL_HANGTIME=2000
-VOX_FILTER_DEPTH=300
+VOX_FILTER_DEPTH=20
 VOX_THRESH=1000
+DEEMPHASIS=0
+PEAK_METER=1
+DTMF_DEC_TYPE=INTERNAL
+DTMF_MUTING=1
+DTMF_HANGTIME=40
 
 [Tx1]
 TYPE=Local
@@ -358,31 +338,24 @@ AUDIO_DEV=udp:127.0.0.1:4810
 AUDIO_CHANNEL=0
 PTT_TYPE=NONE
 TIMEOUT=300
+TX_DELAY=500
+PREEMPHASIS=0
+DTMF_TONE_LENGTH=100
+DTMF_TONE_SPACING=50
+DTMF_DIGIT_PWR=-15
 
 [ReflectorLogic]
 TYPE=Reflector
 HOST=
-TG=
-AUTH_KEY=
 CALLSIGN=${CALLSIGN}
+AUTH_KEY="Change this key now!"
 JITTER_BUFFER_DELAY=0
-
-[LocationInfo]
-BEACON_INTERVAL=15
-TX_FREQUENCY=${TX_FREQ}
-RX_FREQUENCY=${RX_FREQ}
-TX_POWER=1
-ANTENNA_HEIGHT=10
-ANTENNA_GAIN=0
-ANTENNA_DIR=-1
-PATH=
-COMMENT=Pi-Star SVXLink
 CONF
 
     chmod 644 "$SVXLINK_CONF"
-    info "Created default SVXLink config at $SVXLINK_CONF"
-    info "Audio configured via UDP: Rx=udp:127.0.0.1:3810, Tx=udp:127.0.0.1:4810"
-    warn "Set AUTH_KEY in $SVXLINK_CONF before connecting to a reflector"
+    info "Created SVXLink config at $SVXLINK_CONF"
+    info "Audio: Rx=udp:127.0.0.1:3810 Tx=udp:127.0.0.1:4810"
+    warn "Set AUTH_KEY via /admin/expert/edit_svxlink.php before connecting to a reflector"
 }
 
 # ── Install: Step 6 - MMDVMHost FM Network ───────────────────────────
