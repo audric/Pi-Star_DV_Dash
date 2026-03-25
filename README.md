@@ -21,6 +21,7 @@ This adds [SVXLink](https://github.com/sm0svx/svxlink) as a network gateway for 
 SSH into your Pi-Star and run:
 
 ```bash
+rpi-rw
 cd /tmp
 git clone https://github.com/audric/Pi-Star_DV_Dash.git
 cd Pi-Star_DV_Dash/deploy
