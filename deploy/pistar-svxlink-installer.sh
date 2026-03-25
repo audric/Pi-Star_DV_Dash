@@ -453,8 +453,10 @@ main() {
     install_mmdvmhost_fm_network
     install_sudoers
 
-    # Enable SVXLink service (but don't start it - needs config first)
+    # Enable and start services
     systemctl enable svxlink 2>/dev/null || true
+    systemctl restart mmdvmhost 2>/dev/null || true
+    systemctl start svxlink 2>/dev/null || true
 
     echo ""
     info "═══════════════════════════════════════════════════"
@@ -463,9 +465,7 @@ main() {
     info "Next steps:"
     info "  1. Set AUTH_KEY via web: /admin/expert/edit_svxlink.php"
     info "  2. Add reflector hosts via web: /admin/expert/fulledit_svxlinkhosts.php"
-    info "  3. Restart MMDVMHost: sudo systemctl restart mmdvmhost"
-    info "  4. Start SVXLink: sudo systemctl start svxlink"
-    info "  5. Use the SVXLink Manager in the admin dashboard"
+    info "  3. Use the SVXLink Manager in the admin dashboard"
     info ""
     info "To uninstall: sudo $0 --uninstall"
     info "═══════════════════════════════════════════════════"
