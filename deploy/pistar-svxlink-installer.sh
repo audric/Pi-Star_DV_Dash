@@ -123,13 +123,22 @@ do_uninstall() {
 
     # Restore original dashboard repo
     if [ -d "${DASHBOARD_DIR}/.git" ]; then
+        git config --global --add safe.directory "$DASHBOARD_DIR"
         cd "$DASHBOARD_DIR"
+        # Read saved original remote, fall back to default
+        if [ -f "${DASHBOARD_DIR}/.original_remote" ]; then
+            ORIG_REMOTE=$(cat "${DASHBOARD_DIR}/.original_remote")
+        else
+            ORIG_REMOTE="$DASHBOARD_REPO_DEFAULT"
+        fi
+        [ -z "$ORIG_REMOTE" ] && ORIG_REMOTE="$DASHBOARD_REPO_DEFAULT"
         CURRENT_REMOTE=$(git remote get-url origin 2>/dev/null || echo "")
-        if [ "$CURRENT_REMOTE" != "$DASHBOARD_REPO_DEFAULT" ]; then
-            git remote set-url origin "$DASHBOARD_REPO_DEFAULT"
+        if [ "$CURRENT_REMOTE" != "$ORIG_REMOTE" ]; then
+            git remote set-url origin "$ORIG_REMOTE"
             git fetch origin
             git reset --hard origin/master
-            info "Dashboard restored to upstream: $DASHBOARD_REPO_DEFAULT"
+            rm -f "${DASHBOARD_DIR}/.original_remote"
+            info "Dashboard restored to: $ORIG_REMOTE"
         fi
     fi
 
