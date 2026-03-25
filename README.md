@@ -21,6 +21,10 @@ Radio RF <-> MMDVM modem <-> MMDVMHost [FM Network] <-> UDP (3810/4810) <-> SVXL
 - `pistar-svxlink-installer.sh` — installs everything on an existing Pi-Star
 - `svxlink_ctrl` — helper script for reflector connect/disconnect
 
+## Prerequisites
+
+Your MMDVM board must support FM mode. If FM doesn't work on your hardware (modem firmware too old, board doesn't support analog FM), SVXLink won't work either — it depends on MMDVMHost's FM Network for audio.
+
 ## Installation on Pi-Star
 
 SSH into your Pi-Star and run:

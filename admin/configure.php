@@ -1552,7 +1552,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvmpid' ) {
@@ -1569,7 +1569,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvmuadu' ) {
@@ -1586,7 +1586,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvmuada' ) {
@@ -1603,7 +1603,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvmbss' ) {
@@ -1622,7 +1622,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvmbsd' ) {
@@ -1641,7 +1641,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvmuagmsku' ) {
@@ -1656,7 +1656,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    system($rollRepeaterType1);
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvmuagmska' ) {
@@ -1671,7 +1671,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    system($rollRepeaterType1);
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvrptr1' ) {
@@ -1684,7 +1684,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    system($rollRepeaterType1);
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvrptr2' ) {
@@ -1697,7 +1697,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    system($rollRepeaterType1);
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvrptr3' ) {
@@ -1710,7 +1710,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    system($rollRepeaterType1);
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'gmsk_modem' ) {
@@ -1720,7 +1720,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    system($rollRepeaterType1);
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvap' ) {
@@ -1731,7 +1731,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    system($rollRepeaterType1);
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'zumspotlibre' ) {
@@ -1744,7 +1744,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'zumspotusb' ) {
@@ -1757,7 +1757,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'lsusb' ) {
@@ -1770,7 +1770,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'zumspotgpio' ) {
@@ -1783,7 +1783,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'zumspotdualgpio' ) {
@@ -1796,7 +1796,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'zumspotduplexgpio' ) {
@@ -1808,7 +1808,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['General']['Duplex'] = 1;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
           if ( $confHardware == 'zumradiopiusb' ) {
@@ -1861,7 +1861,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['Modem']['UARTSpeed'] = "115200";
 	    if (isset($configmmdvm['NXDN']['Enable'])) { $configmmdvm['NXDN']['Enable'] = "0"; }
 	    if (isset($configmmdvm['M17']['Enable'])) { $configmmdvm['M17']['Enable'] = "0"; }
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'rptrbldrv1v2dup' ) {
@@ -1878,7 +1878,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['Modem']['UARTSpeed'] = "115200";
 	    if (isset($configmmdvm['NXDN']['Enable'])) { $configmmdvm['NXDN']['Enable'] = "0"; }
 	    if (isset($configmmdvm['M17']['Enable'])) { $configmmdvm['M17']['Enable'] = "0"; }
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'rptrbldrv3v4v5' ) {
@@ -1996,7 +1996,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'lshshatgpio' ) {
@@ -2021,7 +2021,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'mmdvmhsdualbandgpio' ) {
@@ -2034,7 +2034,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'sbhsdualbandgpio' ) {
@@ -2047,7 +2047,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'genesyshat' ) {
@@ -2060,7 +2060,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'genesysdualhat' ) {
@@ -2072,7 +2072,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['General']['Duplex'] = 1;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'mmdvmhsdualhatgpio' ) {
@@ -2084,7 +2084,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['General']['Duplex'] = 1;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'lshsdualhatgpio' ) {
@@ -2096,7 +2096,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['General']['Duplex'] = 1;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'mmdvmhsdualhatusb' ) {
@@ -2108,7 +2108,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['General']['Duplex'] = 1;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'mmdvmrpthat' ) {
@@ -2132,7 +2132,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'mmdvmvyehat' ) {
@@ -2145,7 +2145,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'mmdvmvyehatdual' ) {
@@ -2157,7 +2157,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['General']['Duplex'] = 1;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'mnnano-spot' ) {
@@ -2170,7 +2170,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'mnnano-teensy' ) {
@@ -2197,7 +2197,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'nanodvusb' ) {
@@ -2226,7 +2226,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvmpicasths' ) {
@@ -2243,7 +2243,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  if ( $confHardware == 'dvmpicasthd' ) {
@@ -2260,7 +2260,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 	  
 	  if ( $confHardware == 'opengd77' ) {
@@ -2273,7 +2273,7 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	    $configmmdvm['DMR Network']['Slot1'] = 0;
 	    $configmmdvm['Modem']['Protocol'] = "uart";
 	    $configmmdvm['Modem']['UARTPort'] = $configmmdvm['Modem']['Port'];
-	    if (isset($configmmdvm['FM']['Enable'])) { $configmmdvm['FM']['Enable'] = "0"; }
+	    //FM Enable is now controlled by its own toggle
 	  }
 
 	  // Set the Service start delay
@@ -2366,6 +2366,12 @@ if ($_SERVER["PHP_SELF"] == "/admin/configure.php") {
 	if (empty($_POST['MMDVMModeM17']) != TRUE ) {
           if (escapeshellcmd($_POST['MMDVMModeM17']) == 'ON' )  { $configmmdvm['M17']['Enable'] = "1"; $configmmdvm['M17 Network']['Enable'] = "1"; }
           if (escapeshellcmd($_POST['MMDVMModeM17']) == 'OFF' ) { $configmmdvm['M17']['Enable'] = "0"; $configmmdvm['M17 Network']['Enable'] = "0"; }
+	}
+
+	// Set SVXLink (FM + FM Network) Mode
+	if (empty($_POST['MMDVMModeSVX']) != TRUE ) {
+          if (escapeshellcmd($_POST['MMDVMModeSVX']) == 'ON' )  { $configmmdvm['FM']['Enable'] = "1"; $configmmdvm['FM Network']['Enable'] = "1"; }
+          if (escapeshellcmd($_POST['MMDVMModeSVX']) == 'OFF' ) { $configmmdvm['FM']['Enable'] = "0"; $configmmdvm['FM Network']['Enable'] = "0"; }
 	}
 
 	// Set YSF2DMR Mode
@@ -3689,6 +3695,7 @@ else:
 		$toggleDMR2YSFCheckboxCr		= 'onclick="toggleDMR2YSFCheckbox()"';
 		$toggleDMR2NXDNCheckboxCr		= 'onclick="toggleDMR2NXDNCheckbox()"';
 		$togglePOCSAGCheckboxCr			= 'onclick="togglePOCSAGCheckbox()"';
+		$toggleSVXCheckboxCr			= 'onclick="toggleSVXCheckbox()"';
 		$toggleAPRSGatewayCheckboxCr		= 'onclick="toggleAPRSGatewayCheckbox()"';
 		$toggleDmrGatewayNet1EnCheckboxCr	= 'onclick="toggleDmrGatewayNet1EnCheckbox()"';
 		$toggleDmrGatewayNet2EnCheckboxCr	= 'onclick="toggleDmrGatewayNet2EnCheckbox()"';
@@ -3714,6 +3721,7 @@ else:
 		$toggleDMR2YSFCheckboxCr		= "";
 		$toggleDMR2NXDNCheckboxCr		= "";
 		$togglePOCSAGCheckboxCr			= "";
+		$toggleSVXCheckboxCr			= "";
 		$toggleAPRSGatewayCheckboxCr		= "";
 		$toggleDmrGatewayNet1EnCheckboxCr	= "";
 		$toggleDmrGatewayNet2EnCheckboxCr	= "";
@@ -3779,6 +3787,7 @@ else:
     <input type="hidden" name="MMDVMModeDMR2YSF" value="OFF" />
     <input type="hidden" name="MMDVMModeDMR2NXDN" value="OFF" />
     <input type="hidden" name="MMDVMModePOCSAG" value="OFF" />
+    <input type="hidden" name="MMDVMModeSVX" value="OFF" />
 	<h2><?php echo $lang['mmdvmhost_config'];?></h2>
     <table>
     <tr>
@@ -3948,6 +3957,18 @@ else:
     <td>POCSAG Paging Features</td>
     </tr>
     <?php } ?>
+    <tr>
+    <td align="left"><a class="tooltip2" href="#">SVXLink:<span><b>SVXLink</b>Turn on FM + SVXLink Features</span></a></td>
+    <?php
+	if ( isset($configmmdvm['FM']['Enable']) && $configmmdvm['FM']['Enable'] == 1 && isset($configmmdvm['FM Network']['Enable']) && $configmmdvm['FM Network']['Enable'] == 1 ) {
+		echo "<td align=\"left\"><div class=\"switch\"><input id=\"toggle-svx\" class=\"toggle toggle-round-flat\" type=\"checkbox\" name=\"MMDVMModeSVX\" value=\"ON\" checked=\"checked\" aria-hidden=\"true\" tabindex=\"-1\" ".$toggleSVXCheckboxCr." /><label id=\"aria-toggle-svx\" role=\"checkbox\" tabindex=\"0\" aria-label=\"SVXLink Mode\" aria-checked=\"true\" onKeyPress=\"toggleSVXCheckbox()\" onclick=\"toggleSVXCheckbox()\" for=\"toggle-svx\"><font style=\"font-size:0px\">SVXLink Mode</font></label></div></td>\n";
+		}
+	else {
+		echo "<td align=\"left\"><div class=\"switch\"><input id=\"toggle-svx\" class=\"toggle toggle-round-flat\" type=\"checkbox\" name=\"MMDVMModeSVX\" value=\"ON\" aria-hidden=\"true\" tabindex=\"-1\" ".$toggleSVXCheckboxCr." /><label id=\"aria-toggle-svx\" role=\"checkbox\" tabindex=\"0\" aria-label=\"SVXLink Mode\" aria-checked=\"false\" onKeyPress=\"toggleSVXCheckbox()\" onclick=\"toggleSVXCheckbox()\" for=\"toggle-svx\"><font style=\"font-size:0px\">SVXLink Mode</font></label></div></td>\n";
+	}
+    ?>
+    <td>FM + SVXLink Reflector</td>
+    </tr>
     <tr>
     <td align="left"><a class="tooltip2" href="#"><?php echo $lang['mmdvm_display'];?>:<span><b>Display Type</b>Choose your display type, if you have one.</span></a></td>
     <td align="left" colspan="2"><select name="mmdvmDisplayType">
