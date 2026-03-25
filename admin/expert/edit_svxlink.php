@@ -33,8 +33,7 @@ require_once('../config/version.php');
   <div class="container">
   <?php include './header-menu.inc'; ?>
   <div class="contentwide">
-
-<?php
+  <?php
 $srcfile = '/etc/svxlink/svxlink.conf';
 $filepath = '/tmp/c3Z4bGluaw.tmp';
 
@@ -45,82 +44,47 @@ if (!file_exists($srcfile)) {
 	echo "</td></tr></table>\n";
 } else {
 
-// Do some file wrangling...
-exec('sudo cp '.$srcfile.' '.$filepath);
-exec('sudo chown www-data:www-data '.$filepath);
-exec('sudo chmod 664 '.$filepath);
+if(isset($_POST['data'])) {
+        // File Wrangling
+        exec('sudo cp '.$srcfile.' '.$filepath);
+        exec('sudo chown www-data:www-data '.$filepath);
+        exec('sudo chmod 664 '.$filepath);
 
-// after the form submit
-if($_POST) {
-	$data = $_POST;
-	//update ini file, call function
-	update_ini_file($data, $filepath);
-}
+        // Open the file and write the data
+        $fh = fopen($filepath, 'w');
+        fwrite($fh, $_POST['data']);
+        fclose($fh);
+        exec('sudo mount -o remount,rw /');
+        exec('sudo cp '.$filepath.' '.$srcfile);
+        exec('sudo chmod 644 '.$srcfile);
+        exec('sudo chown root:root '.$srcfile);
+        exec('sudo mount -o remount,ro /');
 
-// this is the function going to update your ini file
-	function update_ini_file($data, $filepath) {
-		$content = "";
+        // Reload the affected daemon
+        exec('sudo systemctl restart svxlink.service');
 
-		// parse the ini file to get the sections
-		$parsed_ini = parse_ini_file($filepath, true);
+        // Re-open the file and read it
+        $fh = fopen($filepath, 'r');
+        $theData = fread($fh, filesize($filepath));
 
-		foreach($data as $section=>$values) {
-			$section = str_replace("_", " ", $section);
-			$content .= "[".$section."]\n";
-			//append the values
-			foreach($values as $key=>$value) {
-				$content .= $key."=".$value."\n";
-			}
-			$content .= "\n";
-		}
-
-		//write it into file
-		if (!$handle = fopen($filepath, 'w')) {
-			return false;
-		}
-
-		$success = fwrite($handle, $content);
-		fclose($handle);
-
-		// Updates complete - copy the working file back to the proper location
-		exec('sudo mount -o remount,rw /');					// Make rootfs writable
-		exec('sudo cp /tmp/c3Z4bGluaw.tmp /etc/svxlink/svxlink.conf');		// Move the file back
-		exec('sudo chmod 644 /etc/svxlink/svxlink.conf');			// Set the correct runtime permissions
-		exec('sudo chown root:root /etc/svxlink/svxlink.conf');			// Set the owner
-		exec('sudo mount -o remount,ro /');					// Make rootfs read-only
-
-		// Reload the affected daemon
-		exec('sudo systemctl restart svxlink.service');				// Reload the daemon
-		return $success;
-	}
-
-// parse the ini file using default parse_ini_file() PHP function
-$parsed_ini = @parse_ini_file($filepath, true);
-
-if ($parsed_ini === false || empty($parsed_ini)) {
-	echo "<table><tr><th>SVXLink Config</th></tr><tr><td>";
-	echo "Could not parse SVXLink config file. It may contain syntax errors.<br />";
-	echo "Try editing it manually: <b>sudo nano ".$srcfile."</b>";
-	echo "</td></tr></table>\n";
 } else {
-	echo '<form action="" method="post">'."\n";
-	foreach($parsed_ini as $section=>$values) {
-		// keep the section as hidden text so we can update once the form submitted
-		echo "<input type=\"hidden\" value=\"$section\" name=\"$section\" />\n";
-		echo "<table>\n";
-		echo "<tr><th colspan=\"2\">$section</th></tr>\n";
-		// print all other values as input fields, so can edit.
-		// note the name='' attribute it has both section and key
-		foreach($values as $key=>$value) {
-			echo "<tr><td align=\"right\" width=\"30%\">$key</td><td align=\"left\"><input type=\"text\" name=\"{$section}[$key]\" value=\"$value\" /></td></tr>\n";
-		}
-		echo "</table>\n";
-		echo '<input type="submit" value="'.$lang['apply'].'" />'."\n";
-		echo "<br />\n";
-	}
-	echo "</form>";
-}
+        // File Wrangling
+        exec('sudo cp '.$srcfile.' '.$filepath);
+        exec('sudo chown www-data:www-data '.$filepath);
+        exec('sudo chmod 664 '.$filepath);
 
+        // Open the file and read it
+        $fh = fopen($filepath, 'r');
+        $theData = fread($fh, filesize($filepath));
+}
+fclose($fh);
+
+?>
+<form name="test" method="post" action="">
+<textarea name="data" cols="80" rows="45"><?php echo htmlspecialchars($theData); ?></textarea><br />
+<input type="submit" name="submit" value="<?php echo $lang['apply']; ?>" />
+</form>
+<?php
 } // end file_exists check
 ?>
 </div>
