@@ -139,8 +139,35 @@ install_svxlink_package() {
     mount -o remount,rw / 2>/dev/null || true
     mount -o remount,rw /boot 2>/dev/null || true
 
-    apt-get update -qq
-    apt-get install -y svxlink-server
+    # Disable stale repos temporarily to avoid apt-get update failures
+    # (Pi-Star bullseye-backports is commonly expired)
+    DISABLED_LISTS=""
+    for f in /etc/apt/sources.list.d/*.list; do
+        [ -f "$f" ] || continue
+        if grep -q 'backports' "$f" 2>/dev/null; then
+            mv "$f" "${f}.disabled"
+            DISABLED_LISTS="${DISABLED_LISTS} ${f}"
+            warn "Temporarily disabled stale repo: $(basename "$f")"
+        fi
+    done
+    # Also check main sources.list for backports
+    if grep -q 'backports' /etc/apt/sources.list 2>/dev/null; then
+        sed -i '/backports/s/^/#/' /etc/apt/sources.list
+        DISABLED_LISTS="${DISABLED_LISTS} /etc/apt/sources.list:backports"
+        warn "Temporarily commented out backports in sources.list"
+    fi
+
+    apt-get update -qq || warn "Some repos failed to update, continuing anyway..."
+    apt-get install -y svxlink-server || error "Failed to install svxlink-server. You may need to install it manually."
+
+    # Re-enable disabled repos
+    for f in $DISABLED_LISTS; do
+        if [ "$f" = "/etc/apt/sources.list:backports" ]; then
+            sed -i '/backports/s/^#//' /etc/apt/sources.list
+        elif [ -f "${f}.disabled" ]; then
+            mv "${f}.disabled" "$f"
+        fi
+    done
 
     info "svxlink-server installed successfully"
 }
