@@ -236,6 +236,13 @@ function showMode($mode, $mmdvmconfigs) {
 			echo "<td style=\"background:#606060; color:#b0b0b0;\" aria-disabled=\"true>\">";
 		}
 	}
+	elseif ( ($mode == "FM Network") && (getEnabled("FM", $mmdvmconfigs) == 1) && file_exists(SVXLINKINIPATH."/".SVXLINKINIFILENAME) ) {
+		if (isProcessRunning("svxlink")) {
+			echo "<td style=\"background:#0b0; color:#030; width:50%;\">";
+		} else {
+			echo "<td style=\"background:#b00; color:#500; width:50%;\">";
+		}
+	}
 	else {
 		echo "<td style=\"background:#606060; color:#b0b0b0;\" aria-disabled=\"true>\">";
     }

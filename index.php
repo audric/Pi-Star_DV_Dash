@@ -254,9 +254,15 @@ if (file_exists('/etc/dstar-radio.mmdvmhost')) {
 		}
 	}
 	$testMMDVModeM17net = getConfigItem("M17 Network", "Enable", $mmdvmconfigs);
-        if ( $testMMDVModeM17net == 1 ) {				// If NXDN network is enabled, add these extra features.
+        if ( $testMMDVModeM17net == 1 ) {				// If M17 network is enabled, add these extra features.
 		if ($_SERVER["PHP_SELF"] == "/admin/index.php") { 	// Admin Only Option
 			include 'mmdvmhost/m17_manager.php';		// M17 Links
+		}
+	}
+	$testMMDVModeFM = getConfigItem("FM", "Enable", $mmdvmconfigs);
+	if ( $testMMDVModeFM == 1 && file_exists(SVXLINKINIPATH."/".SVXLINKINIFILENAME) ) {	// If FM is enabled and SVXLink is configured
+		if ($_SERVER["PHP_SELF"] == "/admin/index.php") {	// Admin Only Option
+			include 'mmdvmhost/svxlink_manager.php';	// SVXLink Manager
 		}
 	}
 	echo '<script type="text/javascript">'."\n";

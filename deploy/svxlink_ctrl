@@ -1,0 +1,97 @@
+#!/bin/bash
+#
+# svxlink_ctrl - Control script for SVXLink reflector connections
+# Deployed to /usr/local/sbin/svxlink_ctrl
+# Called by the Pi-Star Dashboard SVXLink Manager
+#
+
+SVXLINK_CONF="/etc/svxlink/svxlink.conf"
+SVXLINK_SERVICE="svxlink"
+
+usage() {
+    echo "Usage: $0 {connect <host> <tg>|disconnect|restart|status}"
+    exit 1
+}
+
+if [ $# -lt 1 ]; then
+    usage
+fi
+
+case "$1" in
+    connect)
+        if [ $# -lt 3 ]; then
+            echo "Usage: $0 connect <reflector_host> <talkgroup>"
+            exit 1
+        fi
+        REFLECTOR_HOST="$2"
+        TALKGROUP="$3"
+
+        # Validate inputs
+        if ! echo "$REFLECTOR_HOST" | grep -qP '^[A-Za-z0-9._:-]+$'; then
+            echo "Error: Invalid reflector host"
+            exit 1
+        fi
+        if ! echo "$TALKGROUP" | grep -qP '^[0-9]+$'; then
+            echo "Error: Invalid talk group"
+            exit 1
+        fi
+
+        # Update SVXLink reflector config
+        if [ ! -f "$SVXLINK_CONF" ]; then
+            echo "Error: SVXLink config not found at $SVXLINK_CONF"
+            exit 1
+        fi
+
+        # Update HOST and TG in ReflectorLogic section
+        sed -i "/^\[ReflectorLogic\]/,/^\[/ {
+            s|^HOST=.*|HOST=${REFLECTOR_HOST}|
+            s|^TG=.*|TG=${TALKGROUP}|
+        }" "$SVXLINK_CONF"
+
+        # Restart SVXLink to apply
+        systemctl restart "$SVXLINK_SERVICE" 2>/dev/null || service "$SVXLINK_SERVICE" restart 2>/dev/null
+        echo "Connected to $REFLECTOR_HOST TG $TALKGROUP"
+        ;;
+
+    disconnect)
+        # Clear reflector config and restart
+        if [ -f "$SVXLINK_CONF" ]; then
+            sed -i "/^\[ReflectorLogic\]/,/^\[/ {
+                s|^HOST=.*|HOST=|
+                s|^TG=.*|TG=|
+            }" "$SVXLINK_CONF"
+        fi
+
+        systemctl restart "$SVXLINK_SERVICE" 2>/dev/null || service "$SVXLINK_SERVICE" restart 2>/dev/null
+        echo "Disconnected from reflector"
+        ;;
+
+    restart)
+        systemctl restart "$SVXLINK_SERVICE" 2>/dev/null || service "$SVXLINK_SERVICE" restart 2>/dev/null
+        echo "SVXLink restarted"
+        ;;
+
+    status)
+        if systemctl is-active --quiet "$SVXLINK_SERVICE" 2>/dev/null; then
+            echo "SVXLink is running"
+            # Show current reflector connection
+            if [ -f "$SVXLINK_CONF" ]; then
+                HOST=$(grep -A 20 '^\[ReflectorLogic\]' "$SVXLINK_CONF" | grep '^HOST=' | head -1 | cut -d= -f2)
+                TG=$(grep -A 20 '^\[ReflectorLogic\]' "$SVXLINK_CONF" | grep '^TG=' | head -1 | cut -d= -f2)
+                if [ -n "$HOST" ]; then
+                    echo "Reflector: $HOST TG $TG"
+                else
+                    echo "No reflector configured"
+                fi
+            fi
+        else
+            echo "SVXLink is not running"
+        fi
+        ;;
+
+    *)
+        usage
+        ;;
+esac
+
+exit 0

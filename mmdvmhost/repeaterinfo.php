@@ -86,7 +86,8 @@ if (file_exists('/etc/dmr2nxdn')) {
   <tr><?php showMode("P25 Network", $mmdvmconfigs);?><?php showMode("System Fusion Network", $mmdvmconfigs);?></tr>
   <tr><?php showMode("DMR2NXDN Network", $mmdvmconfigs);?><?php showMode("DMR2YSF Network", $mmdvmconfigs);?></tr>
   <tr><?php showMode("YSF2DMR Network", $mmdvmconfigs);?><?php showMode("YSF2NXDN Network", $mmdvmconfigs);?></tr>
-  <tr><?php showMode("YSF2P25 Network", $mmdvmconfigs);?><?php showMode("POCSAG Network", $mmdvmconfigs);?></tr>
+  <tr><?php showMode("YSF2P25 Network", $mmdvmconfigs);?><?php showMode("FM Network", $mmdvmconfigs);?></tr>
+  <tr><?php showMode("POCSAG Network", $mmdvmconfigs);?></tr>
 </table>
 <br />
 
@@ -396,6 +397,37 @@ if ( $testMMDVModeM17 == 1 ) { //Hide the M17 information when P25 Network mode 
 	}
 	echo "<tr><th colspan=\"2\">".$lang['m17_net']."</th></tr>\n";
 	echo "<tr><td colspan=\"2\"style=\"background: #ffffff;\">".getActualLink($logLinesM17Gateway, "M17")."</td></tr>\n";
+	echo "</table>\n";
+}
+
+// SVXLink FM Network info
+$testMMDVModeFM = getConfigItem("FM", "Enable", $mmdvmconfigs);
+$svxlinkConfigFile = SVXLINKINIPATH."/".SVXLINKINIFILENAME;
+if ( $testMMDVModeFM == 1 && file_exists($svxlinkConfigFile) ) {
+	$configsvxlink = @parse_ini_file($svxlinkConfigFile, true);
+	echo "<br />\n";
+	echo "<table>\n";
+	echo "<tr><th colspan=\"2\">SVXLink</th></tr>\n";
+	if (isset($configsvxlink['ReflectorLogic']['HOST'])) {
+		$svxReflectorHost = $configsvxlink['ReflectorLogic']['HOST'];
+		if (strlen($svxReflectorHost) > 19) { $svxReflectorHost = substr($svxReflectorHost, 0, 17) . '..'; }
+		echo "<tr><th>Reflector</th><td style=\"background: #ffffff;\">".$svxReflectorHost."</td></tr>\n";
+	}
+	if (isset($configsvxlink['ReflectorLogic']['TG'])) {
+		echo "<tr><th>TG</th><td style=\"background: #ffffff;\">".$configsvxlink['ReflectorLogic']['TG']."</td></tr>\n";
+	}
+	if (isset($configsvxlink['ReflectorLogic']['CALLSIGN'])) {
+		echo "<tr><th>Callsign</th><td style=\"background: #ffffff;\">".$configsvxlink['ReflectorLogic']['CALLSIGN']."</td></tr>\n";
+	} elseif (isset($configsvxlink['GLOBAL']['CALLSIGN'])) {
+		echo "<tr><th>Callsign</th><td style=\"background: #ffffff;\">".$configsvxlink['GLOBAL']['CALLSIGN']."</td></tr>\n";
+	}
+	echo "<tr><th>Status</th>";
+	if (isProcessRunning("svxlink")) {
+		echo "<td style=\"background:#0b0; color:#030;\">Running</td>";
+	} else {
+		echo "<td style=\"background:#b00; color:#500;\">Stopped</td>";
+	}
+	echo "</tr>\n";
 	echo "</table>\n";
 }
 

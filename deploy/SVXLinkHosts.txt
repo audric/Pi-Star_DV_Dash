@@ -1,0 +1,16 @@
+# SVXLink Reflector Hosts
+# Format: Name  Host
+# Lines starting with # are comments
+#
+# To add custom reflectors, create /root/SVXLinkHosts.txt
+# with the same format.
+#
+# Official SVXReflector instances
+SVXReflector-France	svxreflector.f1tzo.com
+SVXReflector-Germany	svxreflector.dl1hrc.de
+SVXReflector-Spain	svxreflector.ea5gvk.com
+SVXReflector-Italy	svxreflector.iu2kov.it
+SVXReflector-Netherlands	svxreflector.pd2nl.nl
+SVXReflector-Belgium	svxreflector.on4kjm.be
+SVXReflector-Sweden	svxreflector.sk3w.se
+SVXReflector-USA	svxreflector.w1bwn.net
