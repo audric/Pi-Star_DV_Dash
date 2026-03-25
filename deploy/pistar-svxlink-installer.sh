@@ -273,8 +273,11 @@ HOSTS
 install_svxlink_config() {
     info "Step 5/6: Configuring SVXLink..."
 
-    mkdir -p "$SVXLINK_CONF_DIR"
-    mkdir -p "$SVXLINK_LOG_DIR"
+    mkdir -p "$SVXLINK_CONF_DIR" 2>/dev/null || true
+    # Log dir may exist as a symlink from the svxlink package
+    if [ ! -d "$SVXLINK_LOG_DIR" ]; then
+        mkdir -p "$SVXLINK_LOG_DIR" 2>/dev/null || true
+    fi
 
     if [ -f "$SVXLINK_CONF" ]; then
         info "SVXLink config already exists at $SVXLINK_CONF, keeping existing"
