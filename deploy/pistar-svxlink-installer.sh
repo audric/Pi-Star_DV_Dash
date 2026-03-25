@@ -294,13 +294,37 @@ install_svxlink_config() {
         warn "Could not determine callsign from mmdvmhost, using $CALLSIGN"
     fi
 
+    # Read TX/RX frequencies from mmdvmhost if available
+    TX_FREQ="0"
+    RX_FREQ="0"
+    if [ -f /etc/mmdvmhost ]; then
+        TX_FREQ=$(grep -A 20 '^\[Info\]' /etc/mmdvmhost | grep '^TXFrequency=' | head -1 | cut -d= -f2 | tr -d '[:space:]')
+        RX_FREQ=$(grep -A 20 '^\[Info\]' /etc/mmdvmhost | grep '^RXFrequency=' | head -1 | cut -d= -f2 | tr -d '[:space:]')
+    fi
+    [ -z "$TX_FREQ" ] && TX_FREQ="0"
+    [ -z "$RX_FREQ" ] && RX_FREQ="0"
+
     cat > "$SVXLINK_CONF" <<CONF
+# SVXLink configuration for Pi-Star
+# Audio path: MMDVM modem <-> MMDVMHost [FM Network] <-> UDP <-> SVXLink <-> SVXReflector
+# No sound card needed - audio flows via UDP between MMDVMHost and SVXLink.
+#
+# MMDVMHost [FM Network] must be enabled in /etc/mmdvmhost with matching ports:
+#   [FM Network]
+#   Enable=1
+#   LocalAddress=127.0.0.1
+#   LocalPort=3810
+#   GatewayAddress=127.0.0.1
+#   GatewayPort=4810
+#   Protocol=RAW
+#   SampleRate=8000
+
 [GLOBAL]
 LOGICS=SimplexLogic
 CALLSIGN=${CALLSIGN}
 TIMESTAMP_FORMAT="%c"
-CARD_SAMPLE_RATE=48000
-CARD_CHANNELS=1
+CARD_SAMPLE_RATE=8000
+CARD_CHANNELS=2
 LOCATION_INFO=LocationInfo
 
 [SimplexLogic]
@@ -319,7 +343,7 @@ RGR_SOUND_DELAY=0
 
 [Rx1]
 TYPE=Local
-AUDIO_DEV=alsa:plughw:0
+AUDIO_DEV=udp:127.0.0.1:3810
 AUDIO_CHANNEL=0
 SQL_DET=VOX
 SQL_START_DELAY=0
@@ -330,7 +354,7 @@ VOX_THRESH=1000
 
 [Tx1]
 TYPE=Local
-AUDIO_DEV=alsa:plughw:0
+AUDIO_DEV=udp:127.0.0.1:4810
 AUDIO_CHANNEL=0
 PTT_TYPE=NONE
 TIMEOUT=300
@@ -345,8 +369,8 @@ JITTER_BUFFER_DELAY=0
 
 [LocationInfo]
 BEACON_INTERVAL=15
-TX_FREQUENCY=0
-RX_FREQUENCY=0
+TX_FREQUENCY=${TX_FREQ}
+RX_FREQUENCY=${RX_FREQ}
 TX_POWER=1
 ANTENNA_HEIGHT=10
 ANTENNA_GAIN=0
@@ -357,7 +381,9 @@ CONF
 
     chmod 644 "$SVXLINK_CONF"
     info "Created default SVXLink config at $SVXLINK_CONF"
-    warn "You must edit $SVXLINK_CONF to configure audio devices and reflector settings"
+    info "Audio configured via UDP: Rx=udp:127.0.0.1:3810, Tx=udp:127.0.0.1:4810"
+    warn "You must enable [FM Network] in /etc/mmdvmhost with matching UDP ports"
+    warn "Set AUTH_KEY in $SVXLINK_CONF before connecting to a reflector"
 }
 
 # ── Install: Step 6 - Sudoers ────────────────────────────────────────
