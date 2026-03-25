@@ -147,7 +147,7 @@ do_uninstall() {
 
 # ── Install: Step 1 - SVXLink package ────────────────────────────────
 install_svxlink_package() {
-    info "Step 1/6: Installing svxlink-server package..."
+    info "Step 1/7: Installing svxlink-server package..."
 
     if command -v svxlink >/dev/null 2>&1; then
         info "svxlink-server is already installed: $(svxlink --version 2>&1 | head -1)"
@@ -193,7 +193,7 @@ install_svxlink_package() {
 
 # ── Install: Step 2 - Dashboard update ───────────────────────────────
 install_dashboard() {
-    info "Step 2/6: Updating dashboard with SVXLink support..."
+    info "Step 2/7: Updating dashboard with SVXLink support..."
 
     if [ ! -d "${DASHBOARD_DIR}/.git" ]; then
         error "Dashboard git repo not found at $DASHBOARD_DIR"
@@ -224,7 +224,7 @@ install_dashboard() {
 
 # ── Install: Step 3 - Control script ─────────────────────────────────
 install_ctrl_script() {
-    info "Step 3/6: Installing svxlink_ctrl helper script..."
+    info "Step 3/7: Installing svxlink_ctrl helper script..."
 
     if [ -f "${SCRIPT_DIR}/svxlink_ctrl" ]; then
         cp "${SCRIPT_DIR}/svxlink_ctrl" "$SVXLINK_CTRL"
@@ -244,7 +244,7 @@ install_ctrl_script() {
 
 # ── Install: Step 4 - Hosts file ─────────────────────────────────────
 install_hosts_file() {
-    info "Step 4/6: Installing SVXLink hosts file..."
+    info "Step 4/7: Installing SVXLink hosts file..."
 
     if [ -f "$SVXLINK_HOSTS" ]; then
         info "SVXLinkHosts.txt already exists, keeping existing file"
@@ -271,7 +271,7 @@ HOSTS
 
 # ── Install: Step 5 - Default SVXLink config ─────────────────────────
 install_svxlink_config() {
-    info "Step 5/6: Configuring SVXLink..."
+    info "Step 5/7: Configuring SVXLink..."
 
     mkdir -p "$SVXLINK_CONF_DIR" 2>/dev/null || true
     # Log dir may exist as a symlink from the svxlink package
@@ -382,13 +382,59 @@ CONF
     chmod 644 "$SVXLINK_CONF"
     info "Created default SVXLink config at $SVXLINK_CONF"
     info "Audio configured via UDP: Rx=udp:127.0.0.1:3810, Tx=udp:127.0.0.1:4810"
-    warn "You must enable [FM Network] in /etc/mmdvmhost with matching UDP ports"
     warn "Set AUTH_KEY in $SVXLINK_CONF before connecting to a reflector"
 }
 
-# ── Install: Step 6 - Sudoers ────────────────────────────────────────
+# ── Install: Step 6 - MMDVMHost FM Network ───────────────────────────
+install_mmdvmhost_fm_network() {
+    info "Step 6/7: Configuring MMDVMHost FM Network..."
+
+    MMDVM_CONF="/etc/mmdvmhost"
+    if [ ! -f "$MMDVM_CONF" ]; then
+        warn "MMDVMHost config not found at $MMDVM_CONF, skipping FM Network setup"
+        return
+    fi
+
+    # Check if [FM Network] section already exists
+    if grep -q '^\[FM Network\]' "$MMDVM_CONF" 2>/dev/null; then
+        # Section exists - ensure Enable=1
+        if grep -A 5 '^\[FM Network\]' "$MMDVM_CONF" | grep -q '^Enable=1'; then
+            info "FM Network already enabled in $MMDVM_CONF"
+        else
+            sed -i '/^\[FM Network\]/,/^\[/ s/^Enable=.*/Enable=1/' "$MMDVM_CONF"
+            info "Enabled FM Network in $MMDVM_CONF"
+        fi
+    else
+        # Append [FM Network] section
+        cat >> "$MMDVM_CONF" <<'FMNET'
+
+[FM Network]
+Enable=1
+LocalAddress=127.0.0.1
+LocalPort=3810
+GatewayAddress=127.0.0.1
+GatewayPort=4810
+Protocol=RAW
+SampleRate=8000
+ModeHang=20
+FMNET
+        info "Added [FM Network] section to $MMDVM_CONF"
+    fi
+
+    # Also ensure [FM] Enable=1
+    if grep -q '^\[FM\]' "$MMDVM_CONF" 2>/dev/null; then
+        if ! grep -A 5 '^\[FM\]' "$MMDVM_CONF" | grep -q '^Enable=1'; then
+            sed -i '/^\[FM\]/,/^\[/ s/^Enable=.*/Enable=1/' "$MMDVM_CONF"
+            info "Enabled FM mode in $MMDVM_CONF"
+        fi
+    fi
+
+    info "MMDVMHost FM Network configured (UDP ports 3810/4810)"
+}
+
+# ── Install: Step 7 - Sudoers ────────────────────────────────────────
 install_sudoers() {
-    info "Step 6/6: Configuring sudoers for web control..."
+    info "Step 7/7: Configuring sudoers for web control..."
 
     cat > "$SUDOERS_FILE" <<'SUDOERS'
 # Allow www-data to control SVXLink via the dashboard
@@ -431,6 +477,7 @@ main() {
     install_ctrl_script
     install_hosts_file
     install_svxlink_config
+    install_mmdvmhost_fm_network
     install_sudoers
 
     # Enable SVXLink service (but don't start it - needs config first)
@@ -441,9 +488,9 @@ main() {
     info "SVXLink support installed successfully!"
     info ""
     info "Next steps:"
-    info "  1. Edit $SVXLINK_CONF to configure audio devices"
+    info "  1. Set AUTH_KEY in $SVXLINK_CONF for your reflector"
     info "  2. Edit $SVXLINK_HOSTS to add reflector hosts"
-    info "  3. Enable FM mode in MMDVMHost (/admin/configure.php)"
+    info "  3. Restart MMDVMHost: sudo systemctl restart mmdvmhost"
     info "  4. Start SVXLink: sudo systemctl start svxlink"
     info "  5. Use the SVXLink Manager in the admin dashboard"
     info ""
