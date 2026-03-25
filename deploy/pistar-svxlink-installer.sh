@@ -199,6 +199,9 @@ install_dashboard() {
         error "Dashboard git repo not found at $DASHBOARD_DIR"
     fi
 
+    # Mark dashboard dir as safe for git (running as root, dir owned by www-data)
+    git config --global --add safe.directory "$DASHBOARD_DIR"
+
     cd "$DASHBOARD_DIR"
 
     # Check current remote
