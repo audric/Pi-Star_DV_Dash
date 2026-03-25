@@ -7,7 +7,7 @@
 #   1. Installs the svxlink-server package
 #   2. Deploys the SVXLink-enabled dashboard (git remote swap)
 #   3. Installs the svxlink_ctrl helper script
-#   4. Deploys the SVXLinkHosts.txt reflector list
+#   4. Creates a default SVXLink configuration
 #   5. Creates a default SVXLink configuration
 #   6. Configures sudoers for web-based control
 #
@@ -23,7 +23,6 @@ DASHBOARD_REPO_DEFAULT="https://github.com/AndyTaylorTweet/Pi-Star_DV_Dash"
 SVXLINK_CONF_DIR="/etc/svxlink"
 SVXLINK_CONF="${SVXLINK_CONF_DIR}/svxlink.conf"
 SVXLINK_CTRL="/usr/local/sbin/svxlink_ctrl"
-SVXLINK_HOSTS="/usr/local/etc/SVXLinkHosts.txt"
 SVXLINK_LOG_DIR="/var/log/svxlink"
 SUDOERS_FILE="/etc/sudoers.d/020_svxlink"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -156,7 +155,7 @@ do_uninstall() {
 
 # ── Install: Step 1 - SVXLink package ────────────────────────────────
 install_svxlink_package() {
-    info "Step 1/7: Installing svxlink-server package..."
+    info "Step 1/6: Installing svxlink-server package..."
 
     if command -v svxlink >/dev/null 2>&1; then
         info "svxlink-server is already installed: $(svxlink --version 2>&1 | head -1)"
@@ -202,7 +201,7 @@ install_svxlink_package() {
 
 # ── Install: Step 2 - Dashboard update ───────────────────────────────
 install_dashboard() {
-    info "Step 2/7: Updating dashboard with SVXLink support..."
+    info "Step 2/6: Updating dashboard with SVXLink support..."
 
     if [ ! -d "${DASHBOARD_DIR}/.git" ]; then
         error "Dashboard git repo not found at $DASHBOARD_DIR"
@@ -233,7 +232,7 @@ install_dashboard() {
 
 # ── Install: Step 3 - Control script ─────────────────────────────────
 install_ctrl_script() {
-    info "Step 3/7: Installing svxlink_ctrl helper script..."
+    info "Step 3/6: Installing svxlink_ctrl helper script..."
 
     if [ -f "${SCRIPT_DIR}/svxlink_ctrl" ]; then
         cp "${SCRIPT_DIR}/svxlink_ctrl" "$SVXLINK_CTRL"
@@ -251,36 +250,9 @@ install_ctrl_script() {
     info "Installed $SVXLINK_CTRL"
 }
 
-# ── Install: Step 4 - Hosts file ─────────────────────────────────────
-install_hosts_file() {
-    info "Step 4/7: Installing SVXLink hosts file..."
-
-    if [ -f "$SVXLINK_HOSTS" ]; then
-        info "SVXLinkHosts.txt already exists, keeping existing file"
-        return
-    fi
-
-    if [ -f "${SCRIPT_DIR}/SVXLinkHosts.txt" ]; then
-        cp "${SCRIPT_DIR}/SVXLinkHosts.txt" "$SVXLINK_HOSTS"
-    elif [ -f "${DASHBOARD_DIR}/deploy/SVXLinkHosts.txt" ]; then
-        cp "${DASHBOARD_DIR}/deploy/SVXLinkHosts.txt" "$SVXLINK_HOSTS"
-    else
-        # Create a minimal hosts file
-        cat > "$SVXLINK_HOSTS" <<'HOSTS'
-# SVXLink Reflector Hosts
-# Format: Name  Host
-# Lines starting with # are comments
-HOSTS
-        warn "Created empty hosts file at $SVXLINK_HOSTS - add reflectors manually"
-    fi
-
-    chmod 644 "$SVXLINK_HOSTS"
-    info "Installed $SVXLINK_HOSTS"
-}
-
-# ── Install: Step 5 - Default SVXLink config ─────────────────────────
+# ── Install: Step 4 - Default SVXLink config ─────────────────────────
 install_svxlink_config() {
-    info "Step 5/7: Configuring SVXLink..."
+    info "Step 4/6: Configuring SVXLink..."
 
     mkdir -p "$SVXLINK_CONF_DIR" 2>/dev/null || true
     # Log dir may exist as a symlink from the svxlink package
@@ -369,7 +341,7 @@ CONF
 
 # ── Install: Step 6 - MMDVMHost FM Network ───────────────────────────
 install_mmdvmhost_fm_network() {
-    info "Step 6/7: Configuring MMDVMHost FM Network..."
+    info "Step 5/6: Configuring MMDVMHost FM Network..."
 
     MMDVM_CONF="/etc/mmdvmhost"
     if [ ! -f "$MMDVM_CONF" ]; then
@@ -423,7 +395,7 @@ FMSECT
 
 # ── Install: Step 7 - Sudoers ────────────────────────────────────────
 install_sudoers() {
-    info "Step 7/7: Configuring sudoers for web control..."
+    info "Step 6/6: Configuring sudoers for web control..."
 
     cat > "$SUDOERS_FILE" <<'SUDOERS'
 # Allow www-data to control SVXLink via the dashboard
@@ -464,7 +436,6 @@ main() {
     install_svxlink_package
     install_dashboard
     install_ctrl_script
-    install_hosts_file
     install_svxlink_config
     install_mmdvmhost_fm_network
     install_sudoers
@@ -479,9 +450,8 @@ main() {
     info "SVXLink support installed successfully!"
     info ""
     info "Next steps:"
-    info "  1. Set AUTH_KEY via web: /admin/expert/edit_svxlink.php"
-    info "  2. Add reflector hosts via web: /admin/expert/fulledit_svxlinkhosts.php"
-    info "  3. Use the SVXLink Manager in the admin dashboard"
+    info "  1. Configure SVXLink via web: /admin/expert/edit_svxlink.php"
+    info "  2. Set AUTH_KEY and reflector HOST in the config"
     info ""
     info "To uninstall: sudo $0 --uninstall"
     info "═══════════════════════════════════════════════════"

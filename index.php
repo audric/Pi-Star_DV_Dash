@@ -259,12 +259,6 @@ if (file_exists('/etc/dstar-radio.mmdvmhost')) {
 			include 'mmdvmhost/m17_manager.php';		// M17 Links
 		}
 	}
-	$testMMDVModeFM = getConfigItem("FM", "Enable", $mmdvmconfigs);
-	if ( $testMMDVModeFM == 1 && file_exists(SVXLINKINIPATH."/".SVXLINKINIFILENAME) ) {	// If FM is enabled and SVXLink is configured
-		if ($_SERVER["PHP_SELF"] == "/admin/index.php") {	// Admin Only Option
-			include 'mmdvmhost/svxlink_manager.php';	// SVXLink Manager
-		}
-	}
 	echo '<script type="text/javascript">'."\n";
 	echo 'function reloadLocalTx(){'."\n";
 	echo '  $("#localTxs").load("/mmdvmhost/localtx.php",function(){ setTimeout(reloadLocalTx,1500) });'."\n";
