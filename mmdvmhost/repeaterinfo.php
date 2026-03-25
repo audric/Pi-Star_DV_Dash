@@ -404,22 +404,34 @@ if ( $testMMDVModeM17 == 1 ) { //Hide the M17 information when P25 Network mode 
 $testMMDVModeFM = getConfigItem("FM", "Enable", $mmdvmconfigs);
 $svxlinkConfigFile = SVXLINKINIPATH."/".SVXLINKINIFILENAME;
 if ( $testMMDVModeFM == 1 && file_exists($svxlinkConfigFile) ) {
-	$configsvxlink = @parse_ini_file($svxlinkConfigFile, true);
+	// Custom parser for SVXLink config (# comments not supported by parse_ini_file)
+	$configsvxlink = array();
+	$svxSection = '';
+	$svxLines = @file($svxlinkConfigFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+	if ($svxLines !== false) {
+		foreach ($svxLines as $svxLine) {
+			$svxLine = trim($svxLine);
+			if ($svxLine == '' || $svxLine[0] == '#') continue;
+			if (preg_match('/^\[(.+)\]$/', $svxLine, $m)) { $svxSection = $m[1]; continue; }
+			if ($svxSection != '' && strpos($svxLine, '=') !== false) {
+				list($k, $v) = explode('=', $svxLine, 2);
+				$configsvxlink[$svxSection][trim($k)] = trim($v, " \t\"");
+			}
+		}
+	}
+	$svxFontStyle = "background: #ffffff; font-family: verdana,arial,sans-serif; font-size: 11px;";
 	echo "<br />\n";
 	echo "<table>\n";
 	echo "<tr><th colspan=\"2\">SVXLink</th></tr>\n";
-	if (isset($configsvxlink['ReflectorLogic']['HOST'])) {
+	if (isset($configsvxlink['ReflectorLogic']['HOST']) && $configsvxlink['ReflectorLogic']['HOST'] != '') {
 		$svxReflectorHost = $configsvxlink['ReflectorLogic']['HOST'];
-		if (strlen($svxReflectorHost) > 19) { $svxReflectorHost = substr($svxReflectorHost, 0, 17) . '..'; }
-		echo "<tr><th>Reflector</th><td style=\"background: #ffffff;\">".$svxReflectorHost."</td></tr>\n";
-	}
-	if (isset($configsvxlink['ReflectorLogic']['TG'])) {
-		echo "<tr><th>TG</th><td style=\"background: #ffffff;\">".$configsvxlink['ReflectorLogic']['TG']."</td></tr>\n";
+		if (strlen($svxReflectorHost) > 24) { $svxReflectorHost = substr($svxReflectorHost, 0, 22) . '..'; }
+		echo "<tr><th>Reflector</th><td style=\"".$svxFontStyle."\">".$svxReflectorHost."</td></tr>\n";
 	}
 	if (isset($configsvxlink['ReflectorLogic']['CALLSIGN'])) {
-		echo "<tr><th>Callsign</th><td style=\"background: #ffffff;\">".$configsvxlink['ReflectorLogic']['CALLSIGN']."</td></tr>\n";
+		echo "<tr><th>Callsign</th><td style=\"".$svxFontStyle."\">".$configsvxlink['ReflectorLogic']['CALLSIGN']."</td></tr>\n";
 	} elseif (isset($configsvxlink['GLOBAL']['CALLSIGN'])) {
-		echo "<tr><th>Callsign</th><td style=\"background: #ffffff;\">".$configsvxlink['GLOBAL']['CALLSIGN']."</td></tr>\n";
+		echo "<tr><th>Callsign</th><td style=\"".$svxFontStyle."\">".$configsvxlink['GLOBAL']['CALLSIGN']."</td></tr>\n";
 	}
 	echo "<tr><th>Status</th>";
 	if (isProcessRunning("svxlink")) {

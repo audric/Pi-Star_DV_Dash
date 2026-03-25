@@ -394,12 +394,19 @@ FMNET
         info "Added [FM Network] section to $MMDVM_CONF"
     fi
 
-    # Also ensure [FM] Enable=1
+    # Ensure [FM] section exists with Enable=1
     if grep -q '^\[FM\]' "$MMDVM_CONF" 2>/dev/null; then
         if ! grep -A 5 '^\[FM\]' "$MMDVM_CONF" | grep -q '^Enable=1'; then
             sed -i '/^\[FM\]/,/^\[/ s/^Enable=.*/Enable=1/' "$MMDVM_CONF"
             info "Enabled FM mode in $MMDVM_CONF"
         fi
+    else
+        cat >> "$MMDVM_CONF" <<'FMSECT'
+
+[FM]
+Enable=1
+FMSECT
+        info "Added [FM] section to $MMDVM_CONF"
     fi
 
     info "MMDVMHost FM Network configured (UDP ports 3810/4810)"
