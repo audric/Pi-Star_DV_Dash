@@ -34,21 +34,30 @@ require_once('../config/version.php');
   <?php include './header-menu.inc'; ?>
   <div class="contentwide">
   <?php
+$srcfile = '/usr/local/etc/SVXLinkHosts.txt';
+$filepath = '/tmp/c3Z4aG9zdHM.tmp';
+
+if (!file_exists($srcfile)) {
+	echo "<table><tr><th>SVXLink Hosts</th></tr><tr><td>";
+	echo "SVXLink hosts file not found at <b>".$srcfile."</b>.<br />";
+	echo "Run the SVXLink installer first, or create the file manually.";
+	echo "</td></tr></table>\n";
+} else {
+
 if(isset($_POST['data'])) {
         // File Wrangling
-        exec('sudo cp /usr/local/etc/SVXLinkHosts.txt /tmp/c3Z4aG9zdHM.tmp');
-        exec('sudo chown www-data:www-data /tmp/c3Z4aG9zdHM.tmp');
-        exec('sudo chmod 664 /tmp/c3Z4aG9zdHM.tmp');
+        exec('sudo cp '.$srcfile.' '.$filepath);
+        exec('sudo chown www-data:www-data '.$filepath);
+        exec('sudo chmod 664 '.$filepath);
 
         // Open the file and write the data
-        $filepath = '/tmp/c3Z4aG9zdHM.tmp';
         $fh = fopen($filepath, 'w');
         fwrite($fh, $_POST['data']);
         fclose($fh);
         exec('sudo mount -o remount,rw /');
-        exec('sudo cp /tmp/c3Z4aG9zdHM.tmp /usr/local/etc/SVXLinkHosts.txt');
-        exec('sudo chmod 644 /usr/local/etc/SVXLinkHosts.txt');
-        exec('sudo chown root:root /usr/local/etc/SVXLinkHosts.txt');
+        exec('sudo cp '.$filepath.' '.$srcfile);
+        exec('sudo chmod 644 '.$srcfile);
+        exec('sudo chown root:root '.$srcfile);
         exec('sudo mount -o remount,ro /');
 
         // Re-open the file and read it
@@ -57,12 +66,11 @@ if(isset($_POST['data'])) {
 
 } else {
         // File Wrangling
-        exec('sudo cp /usr/local/etc/SVXLinkHosts.txt /tmp/c3Z4aG9zdHM.tmp');
-        exec('sudo chown www-data:www-data /tmp/c3Z4aG9zdHM.tmp');
-        exec('sudo chmod 664 /tmp/c3Z4aG9zdHM.tmp');
+        exec('sudo cp '.$srcfile.' '.$filepath);
+        exec('sudo chown www-data:www-data '.$filepath);
+        exec('sudo chmod 664 '.$filepath);
 
         // Open the file and read it
-        $filepath = '/tmp/c3Z4aG9zdHM.tmp';
         $fh = fopen($filepath, 'r');
         $theData = fread($fh, filesize($filepath));
 }
@@ -73,6 +81,9 @@ fclose($fh);
 <textarea name="data" cols="80" rows="30"><?php echo htmlspecialchars($theData); ?></textarea><br />
 <input type="submit" name="submit" value="<?php echo $lang['apply']; ?>" />
 </form>
+<?php
+} // end file_exists check
+?>
 
 </div>
 

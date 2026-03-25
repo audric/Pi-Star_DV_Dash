@@ -35,13 +35,20 @@ require_once('../config/version.php');
   <div class="contentwide">
 
 <?php
-// Do some file wrangling...
-exec('sudo cp /etc/svxlink/svxlink.conf /tmp/c3Z4bGluaw.tmp');
-exec('sudo chown www-data:www-data /tmp/c3Z4bGluaw.tmp');
-exec('sudo chmod 664 /tmp/c3Z4bGluaw.tmp');
-
-// ini file to open
+$srcfile = '/etc/svxlink/svxlink.conf';
 $filepath = '/tmp/c3Z4bGluaw.tmp';
+
+if (!file_exists($srcfile)) {
+	echo "<table><tr><th>SVXLink Config</th></tr><tr><td>";
+	echo "SVXLink config file not found at <b>".$srcfile."</b>.<br />";
+	echo "Run the SVXLink installer first, or create the file manually.";
+	echo "</td></tr></table>\n";
+} else {
+
+// Do some file wrangling...
+exec('sudo cp '.$srcfile.' '.$filepath);
+exec('sudo chown www-data:www-data '.$filepath);
+exec('sudo chmod 664 '.$filepath);
 
 // after the form submit
 if($_POST) {
@@ -88,9 +95,15 @@ if($_POST) {
 	}
 
 // parse the ini file using default parse_ini_file() PHP function
-$parsed_ini = parse_ini_file($filepath, true);
+$parsed_ini = @parse_ini_file($filepath, true);
 
-echo '<form action="" method="post">'."\n";
+if ($parsed_ini === false || empty($parsed_ini)) {
+	echo "<table><tr><th>SVXLink Config</th></tr><tr><td>";
+	echo "Could not parse SVXLink config file. It may contain syntax errors.<br />";
+	echo "Try editing it manually: <b>sudo nano ".$srcfile."</b>";
+	echo "</td></tr></table>\n";
+} else {
+	echo '<form action="" method="post">'."\n";
 	foreach($parsed_ini as $section=>$values) {
 		// keep the section as hidden text so we can update once the form submitted
 		echo "<input type=\"hidden\" value=\"$section\" name=\"$section\" />\n";
@@ -105,7 +118,10 @@ echo '<form action="" method="post">'."\n";
 		echo '<input type="submit" value="'.$lang['apply'].'" />'."\n";
 		echo "<br />\n";
 	}
-echo "</form>";
+	echo "</form>";
+}
+
+} // end file_exists check
 ?>
 </div>
 
